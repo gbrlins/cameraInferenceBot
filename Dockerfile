@@ -17,4 +17,4 @@ RUN pip install --no-cache-dir -r yolov5/requirements.txt
 
 # Definir o ponto de entrada para o contêiner
 ENTRYPOINT ["python3", "yolov5/detect-mod.py", "--weights", "yolov5s.pt", "--source"]
-CMD ["rtsp://<EMAIL>:<SENHA>@192.168.1.32/stream2"]
+CMD ["rtsp://linsgabriel@hotmail.com:Pamw1404*@192.168.1.32/stream2", "--chat-id", "-1002409785541", "--token", "7153243257:AAFJ3hFCneP3QSQY2UwTSm-yO0vW0sKcjSA", "--imgsz", "128"]
