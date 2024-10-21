@@ -1,70 +1,57 @@
-# Imagem docker para camera
+# 📷 Imagem Docker para Câmera
 
-Created: October 21, 2024 10:59 AM
+**Criado em:** 21 de Outubro de 2024 às 10:59 AM
 
-### Descrição
+## 📜 Descrição
 
-A imagem descrita usa a biblioteca ultralytics Yolov5 para, dentro do treinamento padrão, assim que reconhecer um rosto humano, tirar foto e mandar para um bot no telegram.
+Esta imagem Docker utiliza a biblioteca [Ultralytics YOLOv5](https://github.com/ultralytics/yolov5) para realizar a detecção de rostos humanos. Assim que um rosto é reconhecido, o sistema captura uma foto e a envia para um bot no Telegram. 
 
-A recomendação é utilizar para monitoramento de segurança e sistema contra invasão e/ou detecção de pessoas.
+### 💡 Objetivo
 
-### Pré requisito
-
-1. Criar um bot no telegram via API: seguir o procedimento de criação usando o BotFather ([https://t.me/botfather](https://t.me/botfather)). Ao criar, tenha anotado o `token` de uso único e não deve ser compartilhado e o `chatID` da conversa. Todo o procedimento está descrito nessa página: https://gist.github.com/nafiesl/4ad622f344cd1dc3bb1ecbe468ff9f8a
-2. Possuir uma câmera disponível para a detecção da imagem. Essa câmera pode tanto ser uma webcam adicionada ao dispositivo que irá hospedar o container ou um dispositivo de câmera com IP (recomendado).
+O objetivo principal desta aplicação é oferecer uma solução para **monitoramento de segurança**, podendo ser usada como sistema de prevenção contra invasões e para **detecção de pessoas** em ambientes variados.
 
 ---
 
-### Sobre as imagens disponíveis:
+## 🛠️ Pré-requisitos
 
-As imagens disponíveis estão nesse dockerhub ([https://hub.docker.com/repository/docker/gabriellins/camerainferencebot/general](https://hub.docker.com/repository/docker/gabriellins/camerainferencebot/general))
+Antes de utilizar a imagem Docker, é necessário seguir alguns passos:
 
-obs: Atentar-se para as tags das imagens. Todas estão sendo geradas com versão para arm e x86;
+1. **Criar um bot no Telegram via API**: 
+   - Utilize o [BotFather](https://t.me/botfather) para criar um bot. 
+   - Anote o `token`, que é único e deve ser mantido em segredo, e o `chatID` da conversa. 
+   - Um guia detalhado sobre como criar o bot pode ser encontrado [neste link](https://gist.github.com/nafiesl/4ad622f344cd1dc3bb1ecbe468ff9f8a).
 
-1.0-ultralytics: Usa como imagem base o ultralytics/yolov5. 
-
-Entradas: por padrão, foi desenvolvida amarrada ao IP final .32 e usa a conta padrão; Para chama-la basta:
-
-```jsx
-docker run gabriellins/camerainferencebot:1.0-ultralytics 
-```
-
-1.0-ultralytics-global: Imagem totalmente personalizável que espera como entrada:
-
---source '[0]/[rtsp:<email>:<senha>@<ip>/<stream>]'
-
---chat-id '[`chatID`]'
-
---token '[`token`]'
-
---imgsz 256
-
-Para usá-la basta 
-
-```jsx
-docker run -e WEIGHTS="yolov5s.pt" -e SOURCE="rtsp://<email>:<senha>/stream1" -e CHAT_ID="<chatID>" -e TOKEN="<token>" gabriellins/camerainferencebot:1.0-ultralytics-global
-```
+2. **Câmera disponível**:
+   - Certifique-se de ter uma câmera acessível para a detecção de imagem. Pode ser uma webcam conectada ao dispositivo que irá hospedar o container ou uma câmera IP (recomendado).
 
 ---
 
-### Melhorias a serem feitas
+## 🖼️ Imagens Disponíveis
 
-1. Usar imagem base SUSE python
-2. Verificar se a forma utilizada para converter as variáveis de entrada foi a recomendada
-    1. Pensar em utilizar sidecar para injetar essas conversões no script padrão
+As imagens Docker estão disponíveis no Docker Hub: [Camerainferencebot](https://hub.docker.com/repository/docker/gabriellins/camerainferencebot/general).
 
+### ⚠️ Atenção às Tags
 
+As imagens são geradas para arquiteturas ARM e x86. Confira as tags disponíveis:
 
-### Usando fora do container
-Primeiro chamar git clone https://github.com/ultralytics/yolov5.git
+- **`1.0-ultralytics`**: Utiliza como imagem base o `ultralytics/yolov5`. 
+  - **Entradas**: Por padrão, a imagem é configurada para usar o IP final `.32` e a conta padrão. Para executá-la, use:
 
-Entra na pasta yolov5, move o arquivo 'detect-mod.py' para dentro de yolov5
+    ```bash
+    docker run gabriellins/camerainferencebot:1.0-ultralytics 
+    ```
 
-python3 .\yolov5\detect-mod.py --weights yolov5s.pt --source 0 --chat-id -1002409785541 --token <token> --imgsz 128
+- **`1.0-ultralytics-global`**: Imagem totalmente personalizável que espera as seguintes entradas:
+  - `--source '[0]/[rtsp:<email>:<senha>@<ip>/<stream>]`
+  - `--chat-id '[chatID]'`
+  - `--token '[token]'`
+  - `--imgsz 256`
 
-python3 yolov5/detect-mod.py --weights yolov5s.pt --source 'rtsp://<EMAIL>:<SENHA>@192.168.1.32/stream2' --chat-id -1002409785541 --token <TOKEN> --imgsz 128
+  Para executá-la, utilize:
 
-
-O Dockerfile foi criado com um padrão, mas se quiser alterar chamar o container assim:
-
-docker run nome-do-container --source 'rtsp://outro_stream' --chat-id '-1001234567890' --token '<TOKEN>' --imgsz 256
+  ```bash
+  docker run -e WEIGHTS="yolov5s.pt" \
+             -e SOURCE="rtsp://<email>:<senha>/stream1" \
+             -e CHAT_ID="<chatID>" \
+             -e TOKEN="<token>" \
+             gabriellins/camerainferencebot:1.0-ultralytics-global
