@@ -23,19 +23,21 @@ from utils.general import (LOGGER, Profile, check_file, check_img_size, check_im
                            increment_path, non_max_suppression, print_args, scale_boxes, strip_optimizer, xyxy2xywh)
 from utils.torch_utils import select_device, smart_inference_mode
 
-#chat_id ='6313612803'
-#token ='7153243257:AAFJ3hFCneP3QSQY2UwTSm-yO0vW0sKcjSA'
-
-
 @smart_inference_mode()
 def run(
-        weights=ROOT / 'yolov5s.pt',  # model path or triton URL
-        source=ROOT / 'data/images',  # file/dir/URL/glob/screen/0(webcam)
+        #weights=ROOT / 'yolov5s.pt',  # model path or triton URL
+        weights=os.environ.get('WEIGHTS'),
+        #source=ROOT / 'data/images',  # file/dir/URL/glob/screen/0(webcam)
+        source=os.environ.get('SOURCE'),
+        #chat_id='000000',
+        chat_id=os.environ.get('CHAT_ID'),
+        #token='00000000000:000000'
+        token=os.environ.get('TOKEN'),
         data=ROOT / 'data/coco128.yaml',  # dataset.yaml path
         imgsz=(640, 640),  # inference size (height, width)
         conf_thres=0.25,  # confidence threshold
         iou_thres=0.45,  # NMS IOU threshold
-        max_det=1000,  # maximum detections per image
+        max_det=4,  # maximum detections per image
         device='',  # cuda device, i.e. 0 or 0,1,2,3 or cpu
         view_img=False,  # show results
         save_txt=False,  # save results to *.txt
@@ -56,9 +58,7 @@ def run(
         hide_conf=False,  # hide confidences
         half=False,  # use FP16 half-precision inference
         dnn=False,  # use OpenCV DNN for ONNX inference
-        vid_stride=1,  # video frame-rate stride
-        chat_id='000000',
-        token='00000000000:000000'
+        vid_stride=1  # video frame-rate stride
 ):
     source = str(source)
     save_img = not nosave and not source.endswith('.txt')  # save inference images
@@ -298,4 +298,10 @@ def main(opt):
 
 if __name__ == '__main__':
     opt = parse_opt()
+    print(f"Weights: {os.getenv('WEIGHTS')}")
+    print(f"Source: {os.getenv('SOURCE')}")
+    print(f"Chat ID: {os.getenv('CHAT_ID')}")
+    print(f"Token: {os.getenv('TOKEN')}")
+    print(f"Image Size: {os.getenv('IMGSZ')}")
+
     main(opt)
